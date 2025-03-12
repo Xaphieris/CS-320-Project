@@ -1,52 +1,390 @@
 #pragma kernel CSMain
 
 RWTexture2D<float4> Result;
+
+// Camera matrices sent by driver
 float4x4 _CameraToWorld;
 float4x4 _CameraInverseProjection;
 
+// Skybox texture sent by driver
+Texture2D _SkyboxTexture;
+
+//Skybox variables
+SamplerState sampler_SkyboxTexture;
+static const float PI = 3.14159265f;
+
+// Pixel offset sent by the driver
+float2 _PixelOffset;
+
+// Directional light vector sent by driver
+float4 _DirectionalLight;
+
+//Structure of the Ray, stores origin point and the direction of travel
 struct Ray
 {
     float3 origin;
     float3 direction;
+    float3 energy;
 };
 
+//Structure to contain RayHit information, on hit, store the position of the hit, 
+// .. the distance from origin, and the normal of the surface
+struct RayHit
+{
+    float3 position;
+    float distance;
+    float3 normal;
+};
+
+// Create a Ray using the structure, assign an origin and direction
 Ray CreateRay(float3 origin, float3 direction)
 {
     Ray ray;
     ray.origin = origin;
     ray.direction = direction;
+    
+    //Diminish evergy with each reflection, minimizing color intensity
+    ray.energy = float3(1.0f, 1.0f, 1.0f);
     return ray;
 }
 
+// Create a RayHit using the structure, assign position, distance, and normal
+RayHit CreateRayHit()
+{
+    RayHit hit;
+    hit.position = float3(0.0f, 0.0f, 0.0f);
+    hit.distance = 1.#INF;
+    hit.normal = float3(0.0f, 0.0f, 0.0f);
+    return hit;
+}
+
+// Create a Ray, at camera origin with direction along camera view
 Ray CreateCameraRay(float2 uv)
 {
-    // Transform the camera origin to world space
+    // Transform the camera origin to world space (matrix multiplication)
     float3 origin = mul(_CameraToWorld, float4(0.0f, 0.0f, 0.0f, 1.0f)).xyz;
     
-    // Invert the perspective projection of the view-space position
+    // Invert the perspective projection of the view-space position (matrix multiplication)
+    // Gets the direction through the uv point
     float3 direction = mul(_CameraInverseProjection, float4(uv, 0.0f, 1.0f)).xyz;
+
     // Transform the direction from camera to world space and normalize
     direction = mul(_CameraToWorld, float4(direction, 0.0f)).xyz;
+
+    // Convert to a unit vector maintaining direction
     direction = normalize(direction);
 
     return CreateRay(origin, direction);
 }
 
+// ***** Collisions ******
+
+
+//Create an infinite ground plane at Y=0
+void IntersectGroundPlane(Ray ray, inout RayHit bestHit)
+{
+    // Calculate distance along the ray where the ground plane is intersected
+    float t = -ray.origin.y / ray.direction.y;
+    if (t > 0 && t < bestHit.distance)
+    {
+        bestHit.distance = t;
+        bestHit.position = ray.origin + t * ray.direction;
+        bestHit.normal = float3(0.0f, 1.0f, 0.0f);
+    }
+}
+
+//Create a sphere and get intersections
+void IntersectSphere(Ray ray, inout RayHit bestHit, float4 sphere)
+{
+    // Calculate a vector between the origin of the ray and the sphere
+    float3 d = ray.origin - sphere.xyz;
+
+    // Dotproduct between ray direction and the vector from the ray to the sphere to get entry point
+    float p1 = -dot(ray.direction, d);
+
+    // Pythageon theorem to check if the ray actually passes through the sphere by creating a traingle relationship
+    // Must all add to 0 else bad relationship and the ray misses
+    float p2sqr = p1 * p1 - dot(d, d) + sphere.w * sphere.w;
+    
+    if (p2sqr < 0)
+        return;
+    
+    // Get point 2    
+    float p2 = sqrt(p2sqr);
+    
+    // Check is p1 - p2 is positive, if so, take the difference, else, add them
+    float t = p1 - p2 > 0 ? p1 - p2 : p1 + p2;
+    
+    // Get hit info
+    if (t > 0 && t < bestHit.distance)
+    {
+        bestHit.distance = t;
+        bestHit.position = ray.origin + t * ray.direction;
+        bestHit.normal = normalize(bestHit.position - sphere.xyz);
+    }
+}
+
+void IntersectCube(Ray ray, inout RayHit bestHit, float3 cmin, float3 cmax)
+{
+    float tmin = (cmin.x - ray.origin.x) / ray.direction.x;
+    float tmax = (cmax.x - ray.origin.x) / ray.direction.x;
+
+    if(tmin > tmax)
+    {
+        float ttemp = tmax;
+        tmax = tmin;
+        tmin = ttemp;
+    }
+
+    float tymin = (cmin.y - ray.origin.y) / ray.direction.y;
+    float tymax = (cmax.y - ray.origin.y) / ray.direction.y;
+
+    if(tymin > tymax)
+    {
+        float ttemp = tymax;
+        tymax = tymin;
+        tymin = ttemp;
+    }
+
+    if(tymin > tmax || tmin > tymax)
+    {
+        return;
+    }
+
+    if(tymin > tmin)
+    {
+        tmin = tymin;
+    }
+    if(tymax < tmax)
+    {
+        tmax = tymax;
+    }
+
+    float tzmin = (cmin.z - ray.origin.z) / ray.direction.z;
+    float tzmax = (cmax.z - ray.origin.z) / ray.direction.z;
+
+    if(tzmin > tzmax)
+    {
+        float ttemp = tzmax;
+        tzmax = tzmin;
+        tzmin = ttemp;
+    }
+
+    if (tmin > tzmax || tzmin > tmax) 
+    {
+        return;
+    }    
+    
+
+    if(tzmin > tmin)
+    {
+        tmin = tzmin;
+    }
+    if(tzmax < tmax)
+    {
+        tmax = tzmax;
+    }
+
+    if (tmin > 0 && tmin < bestHit.distance)
+    {
+        bestHit.distance = tmin;
+        bestHit.position = ray.origin + tmin * ray.direction;
+        
+        if (tmin == (cmin.x - ray.origin.x) / ray.direction.x) 
+        {
+            bestHit.normal = float3(-1.0, 0.0, 0.0); // Normal facing the min.x face
+        } 
+        else if (tmin == (cmax.x - ray.origin.x) / ray.direction.x) 
+        {
+            bestHit.normal = float3(1.0, 0.0, 0.0); // Normal facing the max.x face
+        } 
+        else if (tmin == (cmin.y - ray.origin.y) / ray.direction.y) 
+        {
+            bestHit.normal = float3(0.0, -1.0, 0.0); // Normal facing the min.y face
+        } 
+        else if (tmin == (cmax.y - ray.origin.y) / ray.direction.y) 
+        {
+            bestHit.normal = float3(0.0, 1.0, 0.0); // Normal facing the max.y face
+        } 
+        else if (tmin == (cmin.z - ray.origin.z) / ray.direction.z) 
+        {
+            bestHit.normal = float3(0.0, 0.0, -1.0); // Normal facing the min.z face
+        }
+        else 
+        {
+            bestHit.normal = float3(0.0, 0.0, 1.0); // Normal facing the max.z face
+        }
+    }
+}
+
+
+// Trace back Ray
+RayHit Trace(Ray ray)
+{
+    //New var to store the best hit
+    RayHit bestHit = CreateRayHit();
+
+    // Check for gound intersection
+    IntersectGroundPlane(ray, bestHit);
+
+    // Check for sphere intersection for sphere at the designated point (x, y, z, radius)
+    IntersectSphere(ray, bestHit, float4(0, 3.0f, 0, 1.0f));
+
+    // Check for cube intersection for cube with min and max points
+    IntersectCube(ray, bestHit, float3(-1.0f, 0.0f, -1.0f), float3(1.0f, 2.0f, 1.0f));
+
+    return bestHit;
+}
+
+
+//*** Shader without reflection ***
+// float3 Shade(inout Ray ray, RayHit hit)
+// {
+//     //If the ray hits something
+//     if (hit.distance < 1.#INF)
+//     {
+//         // Return the normal
+//         return hit.normal * 0.5f + 0.5f;
+//     }
+//     //Else sample skybox UV
+//     else
+//     {
+//         // Sample the skybox and write it
+//         float theta = acos(ray.direction.y) / -PI;
+//         float phi = atan2(ray.direction.x, -ray.direction.z) / -PI * 0.5f;
+//         return _SkyboxTexture.SampleLevel(sampler_SkyboxTexture, float2(phi, theta), 0).xyz;
+//     }
+// }
+
+
+//*** Shader with reflection ***
+float3 Shade(inout Ray ray, RayHit hit)
+{
+    //If ray hits
+    if (hit.distance < 1.#INF)
+    {
+        //Reflectivity value RGB
+        float3 specular = float3(0.6f, 0.6f, 0.6f);
+
+        // Diffusion value RGB
+        float3 albedo = float3(0.8f, 0.8f, 0.8f);
+
+        // Reflect the ray and multiply energy with specular reflection
+        // Get new ray origin from hit
+        ray.origin = hit.position + hit.normal * 0.001f;
+
+        // Get new ray direction from reflection
+        ray.direction = reflect(ray.direction, hit.normal);
+        
+        //Reduce energy by a factor of reflectivity
+        ray.energy *= specular;
+
+
+
+        // Shadow test ray
+        bool shadow = false;
+
+        // Create a ray cast from the hit position through the origin of the light
+        Ray shadowRay = CreateRay(hit.position + hit.normal * 0.001f, -1 * _DirectionalLight.xyz);
+        
+        // Check if it hits anything
+        RayHit shadowHit = Trace(shadowRay);
+        
+        //If it hits something
+        if (shadowHit.distance != 1.#INF)
+        {
+            // Return black
+            return float3(0.0f, 0.0f, 0.0f);
+        }
+
+
+
+        // Return a diffuse-shaded color (saturate to clamp between 0, 1)
+        return saturate(dot(hit.normal, _DirectionalLight.xyz) * -1) * _DirectionalLight.w * albedo;
+    }
+
+    //No hit (skybox)
+    else
+    {
+        // Erase the ray's energy - the sky doesn't reflect anything
+        ray.energy = 0.0f;
+
+        // Sample the skybox and write it
+        float theta = acos(ray.direction.y) / -PI;
+        float phi = atan2(ray.direction.x, -ray.direction.z) / -PI * 0.5f;
+        return _SkyboxTexture.SampleLevel(sampler_SkyboxTexture, float2(phi, theta), 0).xyz;
+    }
+}
+
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+    /*
+        - Get screen dimensions
+        - Get a pixel on the screen
+        - Cast ray from camera through pixel
+        - Return color based on the ray
+    */
+
+    bool trace = true;
+    bool reflect = false;
+
+
     // Get the dimensions of the RenderTexture
     uint width, height;
     Result.GetDimensions(width, height);
 
     // Transform pixel to [-1,1] range
-    float2 uv = float2((id.xy + float2(0.5f, 0.5f)) / float2(width, height) * 2.0f - 1.0f);
+    float2 uv = float2((id.xy + _PixelOffset) / float2(width, height) * 2.0f - 1.0f);
 
     // Get a ray for the UVs
     Ray ray = CreateCameraRay(uv);
 
-    // Write some colors
-    Result[id.xy] = float4(ray.direction * 0.5f + 0.5f, 1.0f);
+    //*** No trace ***
+    // Write some colors (fun skybox coloring)
+    //Result[id.xy] = float4(ray.direction * 0.5f + 0.5f, 1.0f);
 
+    // Static skybox color
     //Result[id.xy] = float4(1.0f, 0.0f, 0.0f, 1.0f);
+
+    //*** No reflection trace ***
+    if(trace && !reflect)
+    {
+        //Get Ray Hit
+        RayHit hit = Trace(ray);
+
+        // Create result color from hit or skybox
+        float3 result = Shade(ray, hit);
+
+        // Display pixel color
+        Result[id.xy] = float4(result, 1);
+    }
+    //*** Reflection trace ***
+    else if(reflect)
+    {
+        
+        //Start with blank result
+        float3 result = float3(0, 0, 0);
+
+        // For 7 reflections + 1 starting
+        for (int i = 0; i < 8; i++)
+        {
+            // Trace the ray
+            RayHit hit = Trace(ray);
+
+            //Add each hit to the result
+            result += ray.energy * Shade(ray, hit);
+
+            //If the ray runs out of energy, end the loop
+            if (!any(ray.energy))
+                break;
+        }
+
+        Result[id.xy] = float4(result, 1);
+    }
+    else
+    {
+        Result[id.xy] = float4(ray.direction * 0.5f + 0.5f, 1.0f);
+    }
+    
 }

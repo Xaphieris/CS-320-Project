@@ -1,18 +1,18 @@
 {
   "context": {
-    "projectPath": "C:/Users/ztech/CS-320 Project/Packages",
+    "projectPath": "C:/Users/ztech/CS-320-Project/Packages",
     "unityVersion": "6000.0.35f1"
   },
   "inputs": [
-    "C:\\Users\\ztech\\CS-320 Project\\Packages\\manifest.json",
-    "C:\\Users\\ztech\\CS-320 Project\\Packages\\packages-lock.json",
+    "C:\\Users\\ztech\\CS-320-Project\\Packages\\manifest.json",
+    "C:\\Users\\ztech\\CS-320-Project\\Packages\\packages-lock.json",
     "C:\\Program Files\\Unity\\Hub\\Editor\\6000.0.35f1\\Editor\\Data\\Resources\\PackageManager\\BuiltInPackages\\BuiltInPackagesCombined.sha1"
   ],
   "outputs": {
     "com.unity.collab-proxy@2.7.1": {
       "name": "com.unity.collab-proxy",
       "displayName": "Version Control",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.collab-proxy@50ac96531b63",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.collab-proxy@50ac96531b63",
       "fingerprint": "50ac96531b6358586ccfdf8cc845939bf50d9fab",
       "editorCompatibility": "2021.3.0f1",
       "version": "2.7.1",
@@ -22,7 +22,7 @@
     "com.unity.feature.development@1.0.2": {
       "name": "com.unity.feature.development",
       "displayName": "Engineering",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.feature.development@767aadbc6eb7",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.feature.development@767aadbc6eb7",
       "fingerprint": "767aadbc6eb72681a4ca807c8fa248e0230a0cef",
       "version": "1.0.2",
       "source": "builtin",
@@ -31,7 +31,7 @@
     "com.unity.inputsystem@1.11.2": {
       "name": "com.unity.inputsystem",
       "displayName": "Input System",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.inputsystem@3c4a97c3950f",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.inputsystem@3c4a97c3950f",
       "fingerprint": "3c4a97c3950fef77960981e0fe90613de6e512ee",
       "editorCompatibility": "2019.4.0a1",
       "version": "1.11.2",
@@ -41,7 +41,7 @@
     "com.unity.multiplayer.center@1.0.0": {
       "name": "com.unity.multiplayer.center",
       "displayName": "Multiplayer Center",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.multiplayer.center@f502d8ac613f",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.multiplayer.center@f502d8ac613f",
       "fingerprint": "f502d8ac613fa076192423e73892fbd89eb4049b",
       "editorCompatibility": "6000.0.0a1",
       "version": "1.0.0",
@@ -51,7 +51,7 @@
     "com.unity.timeline@1.8.7": {
       "name": "com.unity.timeline",
       "displayName": "Timeline",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.timeline@c58b4ee65782",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.timeline@c58b4ee65782",
       "fingerprint": "c58b4ee65782ad38338e29f7ee67787cb6998f04",
       "editorCompatibility": "2019.3.0a1",
       "version": "1.8.7",
@@ -61,7 +61,7 @@
     "com.unity.ugui@2.0.0": {
       "name": "com.unity.ugui",
       "displayName": "Unity UI",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.ugui@24b10291b18f",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.ugui@24b10291b18f",
       "fingerprint": "24b10291b18f65e937b22d041c48712033f29449",
       "editorCompatibility": "2019.2.0a1",
       "version": "2.0.0",
@@ -71,7 +71,7 @@
     "com.unity.visualscripting@1.9.5": {
       "name": "com.unity.visualscripting",
       "displayName": "Visual Scripting",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.visualscripting@1b53f46e931b",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.visualscripting@1b53f46e931b",
       "fingerprint": "1b53f46e931bea668e53f1feb0ac9138170c9455",
       "editorCompatibility": "2021.3.0a1",
       "version": "1.9.5",
@@ -353,7 +353,7 @@
     "com.unity.ide.visualstudio@2.0.22": {
       "name": "com.unity.ide.visualstudio",
       "displayName": "Visual Studio Editor",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.ide.visualstudio@8140e851d83e",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.ide.visualstudio@8140e851d83e",
       "fingerprint": "8140e851d83e922ca2021b04a89519de94ebe38c",
       "editorCompatibility": "2019.4.25f1",
       "version": "2.0.22",
@@ -363,7 +363,7 @@
     "com.unity.ide.rider@3.0.31": {
       "name": "com.unity.ide.rider",
       "displayName": "JetBrains Rider Editor",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.ide.rider@7921be93db40",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.ide.rider@7921be93db40",
       "fingerprint": "7921be93db40ec070fcb01ed82d1c3df1bbdddcd",
       "editorCompatibility": "2019.2.6f1",
       "version": "3.0.31",
@@ -373,7 +373,7 @@
     "com.unity.editorcoroutines@1.0.0": {
       "name": "com.unity.editorcoroutines",
       "displayName": "Editor Coroutines",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.editorcoroutines@7d48783e7b8c",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.editorcoroutines@7d48783e7b8c",
       "fingerprint": "7d48783e7b8cfcee5f8ef9ba787ed0d9dad4ebca",
       "editorCompatibility": "2018.1.0a1",
       "version": "1.0.0",
@@ -383,7 +383,7 @@
     "com.unity.performance.profile-analyzer@1.2.3": {
       "name": "com.unity.performance.profile-analyzer",
       "displayName": "Profile Analyzer",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.performance.profile-analyzer@a68e7bc84997",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.performance.profile-analyzer@a68e7bc84997",
       "fingerprint": "a68e7bc849973d943853204178d08a2bc7656ffe",
       "editorCompatibility": "2020.3.0a1",
       "version": "1.2.3",
@@ -393,7 +393,7 @@
     "com.unity.test-framework@1.4.5": {
       "name": "com.unity.test-framework",
       "displayName": "Test Framework",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.test-framework@0a21eb82d95c",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.test-framework@0a21eb82d95c",
       "fingerprint": "0a21eb82d95cd331643a1e0ce4e8e9a5f18954c8",
       "editorCompatibility": "2019.4.0a10",
       "version": "1.4.5",
@@ -403,7 +403,7 @@
     "com.unity.testtools.codecoverage@1.2.6": {
       "name": "com.unity.testtools.codecoverage",
       "displayName": "Code Coverage",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.testtools.codecoverage@205a02cbcb39",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.testtools.codecoverage@205a02cbcb39",
       "fingerprint": "205a02cbcb39584f20b51c49b853047aceb3a3a7",
       "editorCompatibility": "2019.3.0a1",
       "version": "1.2.6",
@@ -413,7 +413,7 @@
     "com.unity.settings-manager@2.0.1": {
       "name": "com.unity.settings-manager",
       "displayName": "Settings Manager",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.settings-manager@56a930affa1e",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.settings-manager@56a930affa1e",
       "fingerprint": "56a930affa1e4462d3595b5c19a1c2a4bf2015d2",
       "editorCompatibility": "2018.4.0a1",
       "version": "2.0.1",
@@ -423,7 +423,7 @@
     "com.unity.ext.nunit@2.0.5": {
       "name": "com.unity.ext.nunit",
       "displayName": "Custom NUnit",
-      "resolvedPath": "C:\\Users\\ztech\\CS-320 Project\\Library\\PackageCache\\com.unity.ext.nunit@60ef35ffd3cd",
+      "resolvedPath": "C:\\Users\\ztech\\CS-320-Project\\Library\\PackageCache\\com.unity.ext.nunit@60ef35ffd3cd",
       "fingerprint": "60ef35ffd3cd5e2f5c8887a4a4ca6148854cd092",
       "editorCompatibility": "2019.4.0a1",
       "version": "2.0.5",
