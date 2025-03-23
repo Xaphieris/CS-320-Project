@@ -15,7 +15,12 @@ public class CameraOrbit : MonoBehaviour
     private float angleMax = 60F;
     private float angleMin = 5F;
 
+    //Set origin
     private Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+
+    //Toggle values for move right and left
+    bool moveRight;
+    bool moveLeft;
 
 
     // Update is called once per frame
@@ -24,6 +29,8 @@ public class CameraOrbit : MonoBehaviour
         //Mouse controls on middle click
         if(Input.GetMouseButton(2))
         {
+            moveLeft = false;
+            moveRight = false;
 
             this.transform.LookAt(center);
 
@@ -46,6 +53,7 @@ public class CameraOrbit : MonoBehaviour
 
 
         }
+        //Key controls
         else
         {
             if(Input.GetKey(KeyCode.W))
@@ -59,10 +67,38 @@ public class CameraOrbit : MonoBehaviour
             if(Input.GetKey(KeyCode.A))
             {
                 moveX += moveSensitivity * Time.deltaTime;
+                moveLeft = false;
+                moveRight = false;
             }
             if(Input.GetKey(KeyCode.D))
             {
                 moveX -= moveSensitivity * Time.deltaTime;
+                moveLeft = false;
+                moveRight = false;
+            }
+            if(Input.GetKey(KeyCode.E))
+            {
+                moveLeft = false;
+                moveRight = true;
+                
+            }
+            if(Input.GetKey(KeyCode.Q))
+            {
+                moveRight = false;
+                moveLeft = true;
+            }
+            if(moveLeft)
+            {
+                moveX += moveSensitivity * .75f * Time.deltaTime;
+            }
+            if(moveRight)
+            {
+                moveX -= moveSensitivity * .75f * Time.deltaTime;
+            }
+            if(Input.GetKey(KeyCode.Escape))
+            {
+                moveLeft = false;
+                moveRight = false;
             }
 
             //Max angle cap
@@ -83,10 +119,11 @@ public class CameraOrbit : MonoBehaviour
             moveY = 0;
         }
 
-
+        //Clamp and determine radius
         orbitRadius -= Input.mouseScrollDelta.y;
         orbitRadius = Math.Clamp(orbitRadius, minOrbitRadius, maxOrbitRadius);
 
+        //Set camera position
         this.transform.position = center - transform.forward * orbitRadius;
     }
 }

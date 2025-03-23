@@ -400,6 +400,7 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.0.35f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/6000.0.35f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.UIToolkit.SourceGenerator.dll"
 "Assets/Scripts/Camera/CameraOrbit.cs"
+"Assets/Scripts/Light/LightController.cs"
 "Assets/Scripts/Ray Tracer/RayTracer.cs"
 "Assets/Scripts/Ray Tracer/RayTracingDriver.cs"
 -langversion:9.0

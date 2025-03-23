@@ -14,13 +14,16 @@ public class RayTracingDriver : MonoBehaviour
     private uint _currentSample = 0;
     private Material _addMaterial;
 
+    //Light var
     public Light DirectionalLight;
 
+    //Called by camera
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         Render(destination);
     }
 
+    //Render function to handle ray tracer
     private void Render(RenderTexture destination)
     {
         // Make sure we have a current render target
@@ -48,6 +51,7 @@ public class RayTracingDriver : MonoBehaviour
         //Graphics.Blit(target, destination);
     }
 
+    //Initialize the render texture for the tracer
     private void InitRenderTexture()
     {
         if (target == null || target.width != Screen.width || target.height != Screen.height)
@@ -70,8 +74,10 @@ public class RayTracingDriver : MonoBehaviour
         }
     }
 
+    //Set camera
     private Camera camera;
 
+    //On activation, get main camera
     private void Awake()
     {
         camera = Camera.main;
@@ -95,6 +101,7 @@ public class RayTracingDriver : MonoBehaviour
         }
     }
 
+    //Set parameters for the ray tracing shader
     private void SetShaderParameters()
     {
         // Set camera position and projection matrices

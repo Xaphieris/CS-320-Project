@@ -65,6 +65,7 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.0.35f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Light\LightController.cs" />
     <Compile Include="Assets\Scripts\Ray Tracer\RayTracer.cs" />
     <Compile Include="Assets\Scripts\Ray Tracer\RayTracingDriver.cs" />
     <Compile Include="Assets\Scripts\Camera\CameraOrbit.cs" />

@@ -1,5 +1,8 @@
 Shader "Hidden/AddShader"
 {
+    //When active, add each frame together to produce antialiasing
+
+    
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
